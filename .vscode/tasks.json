@@ -12,20 +12,20 @@
                 "${file}",                   // 当前打开的文件 (autodiff_demo.cpp)
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}", // 输出文件名
-                // --- 修改开始 ---
-                "-I${workspaceFolder}/lib/cppad/build/include",
-                "-I${workspaceFolder}/lib/cppad/include",
+                // --- head files ---
+                "-I${workspaceFolder}/lib/cppad/install/include",
+                "-I${workspaceFolder}/lib/cppadcodegen/install/include",
                 "-I/usr/include/eigen3",
 
-                // --- 链接路径配置 (关键修改) ---
-                // 1. 告诉链接器库文件在哪里 (Compile-time)
-                "-L${workspaceFolder}/lib/cppad/build/cppad_lib",
-                // 2. 链接库名 (对应 libcppad_lib.so)
-                "-lcppad_lib",
-                // 3. [新增] 告诉程序运行时去哪里找这个 .so 文件 (Runtime)
+                // dynamic link library
+                "-L${workspaceFolder}/lib/cppad/install/lib", 
+
+                "-lcppad_lib", // 或者 -lcppad，去 install/lib 看一下生成的名字
+                "-ldl",
+
+                // --- RPATH (运行时路径) ---
                 // -Wl,-rpath,后面紧跟路径，中间不要有空格
-                "-Wl,-rpath,${workspaceFolder}/lib/cppad/build/cppad_lib"
-                // --- 修改结束 ---
+                "-Wl,-rpath,${workspaceFolder}/lib/cppad/install/lib"
             ],
             "options": {
                 "cwd": "${fileDirname}"
